@@ -2,7 +2,6 @@ package com.example.authservice.config.oauth2;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -31,6 +30,6 @@ public record CustomOAuth2User (
 
 	@Override
 	public String getName() {
-		return memberResponse.email();
+		return memberResponse.id().toString();
 	}
 }
