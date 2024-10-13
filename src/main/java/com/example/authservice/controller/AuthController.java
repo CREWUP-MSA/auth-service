@@ -2,7 +2,6 @@ package com.example.authservice.controller;
 
 import com.example.authservice.dto.ApiResponse;
 import com.example.authservice.dto.request.SigninRequest;
-import com.example.authservice.dto.request.SignupRequest;
 import com.example.authservice.dto.response.JwtResponse;
 import com.example.authservice.service.AuthService;
 import lombok.RequiredArgsConstructor;

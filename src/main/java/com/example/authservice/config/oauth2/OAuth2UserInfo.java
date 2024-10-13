@@ -4,6 +4,8 @@ import lombok.Builder;
 
 import java.util.Map;
 
+import com.example.authservice.dto.request.MemberRequest;
+
 @Builder
 public record OAuth2UserInfo (
         String name,
@@ -57,12 +59,10 @@ public record OAuth2UserInfo (
                 .build();
     }
 
-    public Member toEntity(String provider) {
-        return Member.builder()
+    public MemberRequest toEntity(String provider) {
+        return MemberRequest.builder()
                 .name(name)
                 .email(email)
-                .nickname(nickname)
-                .role(Role.ROLE_USER)
                 .provider(provider)
                 .build();
     }
