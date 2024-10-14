@@ -1,6 +1,7 @@
 package com.example.authservice.controller;
 
 import com.example.authservice.dto.ApiResponse;
+import com.example.authservice.dto.request.ReissueRequest;
 import com.example.authservice.dto.request.SigninRequest;
 import com.example.authservice.dto.response.JwtResponse;
 import com.example.authservice.service.AuthService;
@@ -22,5 +23,11 @@ public class AuthController {
 	public ResponseEntity<ApiResponse<JwtResponse>> signIn(@RequestBody SigninRequest request) {
 
 		return ResponseEntity.ok(ApiResponse.success(authService.signIn(request)));
+	}
+
+	@PostMapping("/reissue")
+	public ResponseEntity<ApiResponse<JwtResponse>> reissue(@RequestBody ReissueRequest request) {
+
+		return ResponseEntity.ok(ApiResponse.success(authService.reissue(request)));
 	}
 }

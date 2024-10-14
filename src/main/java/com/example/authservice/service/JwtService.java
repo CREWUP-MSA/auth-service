@@ -1,5 +1,7 @@
 package com.example.authservice.service;
 
+import static io.jsonwebtoken.security.Keys.*;
+
 import java.util.Base64;
 import java.util.Date;
 
@@ -42,14 +44,14 @@ public class JwtService {
 			.setClaims(claims)
 			.setIssuedAt(now)
 			.setExpiration(accessTokenExpiration)
-			.signWith(io.jsonwebtoken.security.Keys.hmacShaKeyFor(secretKey.getBytes()))
+			.signWith(hmacShaKeyFor(secretKey.getBytes()))
 			.compact();
 
 		String refreshToken = Jwts.builder()
 			.setClaims(claims)
 			.setIssuedAt(now)
 			.setExpiration(refreshTokenExpiration)
-			.signWith(io.jsonwebtoken.security.Keys.hmacShaKeyFor(secretKey.getBytes()))
+			.signWith(hmacShaKeyFor(secretKey.getBytes()))
 			.compact();
 
 		return JwtResponse.builder()
@@ -59,4 +61,12 @@ public class JwtService {
 			.build();
 	}
 
+	public String getSubject(String token) {
+		return Jwts.parserBuilder()
+			.setSigningKey(secretKey)
+			.build()
+			.parseClaimsJws(token)
+			.getBody()
+			.getSubject();
+	}
 }

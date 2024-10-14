@@ -2,6 +2,7 @@ package com.example.authservice.service;
 
 import com.example.authservice.dto.client.ClientResponse;
 import com.example.authservice.dto.client.MemberResponse;
+import com.example.authservice.dto.request.ReissueRequest;
 import com.example.authservice.dto.request.SigninRequest;
 import com.example.authservice.dto.response.JwtResponse;
 import com.example.authservice.exception.CustomException;
@@ -45,6 +46,38 @@ public class AuthService {
                 throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
             else
                 throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }catch (Exception e) {
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Transactional
+	public JwtResponse reissue(ReissueRequest request) {
+        try {
+            String memberId = jwtService.getSubject(request.refreshToken());
+            String savedRefreshToken = redisService.getRefreshToken(memberId);
+
+            // refreshToken 검증
+            if (savedRefreshToken == null || !savedRefreshToken.equals(request.refreshToken()))
+                throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+
+            MemberResponse memberResponse = memberServiceClient.getMemberById(Long.parseLong(memberId)).data();
+            if (memberResponse.isDeleted())
+                throw new CustomException(ErrorCode.MEMBER_IS_DELETED);
+
+            JwtResponse jwtResponse = jwtService.createToken(memberResponse);
+
+            redisService.deleteRefreshToken(memberId);
+            redisService.saveRefreshToken(memberId, jwtResponse.refreshToken());
+
+            return jwtResponse;
+        } catch (FeignException e) {
+            if (e.status() == 404)
+                throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+            else
+                throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+	}
 }

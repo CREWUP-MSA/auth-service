@@ -25,4 +25,8 @@ public class RedisService {
 		return (String) redisTemplate.opsForValue().get(memberId);
 	}
 
+	public void deleteRefreshToken(String memberId) {
+		redisTemplate.delete(memberId);
+	}
+
 }

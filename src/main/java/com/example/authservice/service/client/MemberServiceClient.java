@@ -18,4 +18,7 @@ public interface MemberServiceClient {
 
     @GetMapping("/member-service/api/member/by-email")
     ClientResponse<MemberResponse> getMemberByEmail(@RequestParam("email") String email);
+
+    @GetMapping("/member-service/api/member/by-id")
+    ClientResponse<MemberResponse> getMemberById(@RequestParam("id") Long id);
 }
