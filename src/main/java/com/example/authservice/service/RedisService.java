@@ -2,6 +2,8 @@ package com.example.authservice.service;
 
 import java.util.concurrent.TimeUnit;
 
+import com.example.authservice.exception.CustomException;
+import com.example.authservice.exception.ErrorCode;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -21,12 +23,18 @@ public class RedisService {
 		redisTemplate.opsForValue().set(memberId, refreshToken, refreshTokenExpiration, TimeUnit.MICROSECONDS);
 	}
 
-	public String getRefreshToken(String memberId) {
-		return (String) redisTemplate.opsForValue().get(memberId);
+	public void validRefreshToken(String memberId, String refreshToken) {
+		String savedRefreshToken = (String) redisTemplate.opsForValue().get(memberId);
+
+		if (savedRefreshToken == null || !savedRefreshToken.equals(refreshToken))
+			throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+
 	}
 
-	public void deleteRefreshToken(String memberId) {
+
+	public void updateRefreshToken(String memberId, String refreshToken) {
 		redisTemplate.delete(memberId);
+		redisTemplate.opsForValue().set(memberId, refreshToken, refreshTokenExpiration, TimeUnit.MICROSECONDS);
 	}
 
 }

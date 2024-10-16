@@ -1,5 +1,6 @@
 package com.example.authservice.service.client;
 
+import com.example.authservice.dto.client.AuthenticateRequest;
 import com.example.authservice.dto.client.ClientResponse;
 import com.example.authservice.dto.client.MemberResponse;
 import com.example.authservice.dto.request.MemberRequest;
@@ -21,4 +22,7 @@ public interface MemberServiceClient {
 
     @GetMapping("/member-service/api/member/by-id")
     ClientResponse<MemberResponse> getMemberById(@RequestParam("id") Long id);
+
+    @PostMapping("/member-service/api/member/authenticate")
+    ClientResponse<Boolean> authenticateMember(@RequestBody AuthenticateRequest request);
 }
