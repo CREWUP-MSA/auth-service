@@ -8,3 +8,9 @@ spring:
     host: ${RABBITMQ_HOST}
     username: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: bus-refresh, health
