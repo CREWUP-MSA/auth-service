@@ -6,7 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import com.example.authservice.dto.ApiResponse;
+import com.example.authservice.dto.CustomApiResponse;
 import com.example.authservice.dto.client.MemberResponse;
 import com.example.authservice.dto.response.JwtResponse;
 import com.example.authservice.service.RedisService;
@@ -39,7 +39,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 		response.setCharacterEncoding("utf-8");
 		response.setStatus(HttpServletResponse.SC_OK);
 
-		ApiResponse<JwtResponse> apiResponse = ApiResponse.success(jwtResponse);
-		response.getWriter().write(objectMapper.writeValueAsString(apiResponse));
+		CustomApiResponse<JwtResponse> customApiResponse = CustomApiResponse.success(jwtResponse);
+		response.getWriter().write(objectMapper.writeValueAsString(customApiResponse));
 	}
 }
