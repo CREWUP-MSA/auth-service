@@ -37,4 +37,7 @@ public class RedisService {
 		redisTemplate.opsForValue().set(memberId, refreshToken, refreshTokenExpiration, TimeUnit.MICROSECONDS);
 	}
 
+	public void delete(String memberId) {
+		redisTemplate.delete(memberId);
+	}
 }

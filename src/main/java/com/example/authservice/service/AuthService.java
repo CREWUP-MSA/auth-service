@@ -61,4 +61,16 @@ public class AuthService {
 
         return jwtResponse;
 	}
+
+    /**
+     * 사용자 로그아웃 처리
+     *
+     * @param memberId 사용자 ID
+     * @return Boolean
+     */
+    @Transactional
+	public Boolean signOut(Long memberId) {
+        redisService.delete(memberId.toString());
+        return true;
+	}
 }
