@@ -9,6 +9,8 @@ import com.example.authservice.exception.CustomException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,4 +75,14 @@ public class AuthService {
         redisService.delete(memberId.toString());
         return true;
 	}
+
+    /**
+     * 회원 탈퇴시 토큰 삭제
+     * @param memberId 사용자 ID
+     */
+    @KafkaListener(topics = "member-delete", groupId = "auth-service-group", containerFactory = "kafkaListenerContainerFactory")
+    @Transactional
+    public void deleteMember(Long memberId) {
+        redisService.delete(memberId.toString());
+    }
 }
